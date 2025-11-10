@@ -2,6 +2,7 @@ package com.example.gameproject;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.res.Resources;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ public abstract class VatTheRoi {
     protected TextView lbl_vatTheRoi;
     protected ObjectAnimator animX, animY;
     protected RelativeLayout VUNG_THA;
+    protected int CHIEU_CAO;
 
     public VatTheRoi(int tocDoRoi, int heSoTangToc, int doDichChuyenTrucNgang,
                      int diemBatDauRoiX, int diemBatDauRoiY, TextView lbl_vatTheRoi,
@@ -25,6 +27,7 @@ public abstract class VatTheRoi {
         this.DIEM_BAT_DAU_ROI_Y = diemBatDauRoiY;
         this.lbl_vatTheRoi = lbl_vatTheRoi;
         this.VUNG_THA = layout_vungTha;
+        this.CHIEU_CAO = Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     /**
@@ -43,7 +46,7 @@ public abstract class VatTheRoi {
         animX = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationX",
                 DIEM_BAT_DAU_ROI_X + DO_DICH_CHUYEN_TRUC_NGANG);
         animY = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationY",
-                1450f); // điểm kết thúc rơi (tùy độ cao màn hình)
+                CHIEU_CAO-700); // điểm kết thúc rơi (tùy độ cao màn hình)
 
         animX.setDuration(TOC_DO_ROI);
         animY.setDuration(TOC_DO_ROI);
