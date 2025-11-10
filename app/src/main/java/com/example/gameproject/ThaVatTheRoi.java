@@ -24,6 +24,10 @@ public class ThaVatTheRoi {
     /** Bắt đầu thả vật thể */
     public void BatDauTha() {
         if (isRunning) return; // tránh gọi nhiều lần
+        VatTheHung vatTheHung = new VatTheHung(this.VUNG_THA_VAT_THE,this.context);
+        vatTheHung.init();
+        vatTheHung.setDragEvent();
+        vatTheHung.addToView();
 
         isRunning = true;
         threadThaVatThe = new Thread(() -> {
@@ -54,7 +58,8 @@ public class ThaVatTheRoi {
                                 randomX, // điểm bắt đầu X
                                 0,       // điểm bắt đầu Y
                                 lbl_lyBia,
-                                VUNG_THA_VAT_THE
+                                VUNG_THA_VAT_THE,
+                                vatTheHung.lbl_beHung
                         );
                         lyBia.khoiTaoVatThe();
                         lyBia.Roi();

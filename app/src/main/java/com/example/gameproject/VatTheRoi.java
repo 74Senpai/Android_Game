@@ -7,6 +7,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 public abstract class VatTheRoi {
     protected int TOC_DO_ROI;
     protected int HE_SO_TANG_TOC;
@@ -17,8 +19,12 @@ public abstract class VatTheRoi {
     protected RelativeLayout VUNG_THA;
     protected int CHIEU_CAO;
 
-    public VatTheRoi(int tocDoRoi, int heSoTangToc, int doDichChuyenTrucNgang,
-                     int diemBatDauRoiX, int diemBatDauRoiY, TextView lbl_vatTheRoi,
+    public VatTheRoi(int tocDoRoi,
+                     int heSoTangToc,
+                     int doDichChuyenTrucNgang,
+                     int diemBatDauRoiX,
+                     int diemBatDauRoiY,
+                     TextView lbl_vatTheRoi,
                      RelativeLayout layout_vungTha) {
         this.TOC_DO_ROI = tocDoRoi;
         this.HE_SO_TANG_TOC = heSoTangToc;
@@ -46,41 +52,55 @@ public abstract class VatTheRoi {
         animX = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationX",
                 DIEM_BAT_DAU_ROI_X + DO_DICH_CHUYEN_TRUC_NGANG);
         animY = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationY",
-                CHIEU_CAO-700); // điểm kết thúc rơi (tùy độ cao màn hình)
+                CHIEU_CAO-50); // điểm kết thúc rơi (tùy độ cao màn hình)
 
         animX.setDuration(TOC_DO_ROI);
         animY.setDuration(TOC_DO_ROI);
         animX.setInterpolator(new LinearInterpolator());
         animY.setInterpolator(new LinearInterpolator());
 
-        // 👇 Khi animation rơi xong, tự động xóa vật thể
+        animY.addUpdateListener(animation -> {
+            float chieuDai = lbl_vatTheRoi.getWidth();
+            float chieuCao = lbl_vatTheRoi.getHeight();
+            float currentX = lbl_vatTheRoi.getX();
+            float currentY = lbl_vatTheRoi.getY();
+            boolean isDown = this.chamBeHung(currentX + chieuDai / 2, currentY + chieuCao);
+            if(isDown) {
+                this.xuLyChamBeHung();
+            }
+        });
+
         animY.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationCancel(@NonNull Animator animation) {
+
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 xoaVatThe(); // ✅ gọi hàm xóa sẵn có
             }
 
             @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationRepeat(@NonNull Animator animation) {
+
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
+            public void onAnimationStart(@NonNull Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
             }
         });
 
         animX.start();
         animY.start();
+
     }
 
     /**
      * Ngừng rơi
      */
-    public void NgungRoi() {
+    public void ngungRoi() {
         if (animX != null) animX.cancel();
         if (animY != null) animY.cancel();
     }
@@ -94,4 +114,7 @@ public abstract class VatTheRoi {
             lbl_vatTheRoi = null; // giải phóng tham chiếu để tránh leak
         }
     }
+
+    public abstract boolean chamBeHung(float x, float y);
+    public abstract void xuLyChamBeHung();
 }

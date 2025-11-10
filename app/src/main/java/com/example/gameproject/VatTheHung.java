@@ -11,9 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class VatTheHung {
-    TextView lbl_beHung;
-    RelativeLayout layout;
-    Context context;
+    public TextView lbl_beHung;
+    protected RelativeLayout layout;
+    protected Context context;
     protected float CHIEU_CAO;
     protected float CHIEU_DAI;
 
@@ -24,17 +24,17 @@ public class VatTheHung {
         this.CHIEU_DAI = Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
-    public void BatDau() {
+    public void init() {
         lbl_beHung = new TextView(this.context);
         lbl_beHung.setText("Be hung");
         lbl_beHung.setBackgroundColor(Color.RED);
         lbl_beHung.setTextSize(30);
         lbl_beHung.setX(CHIEU_DAI/2);
-        lbl_beHung.setY(CHIEU_CAO-900);
+        lbl_beHung.setY(CHIEU_CAO-500);
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public void KeoTha() {
+    public void setDragEvent() {
         lbl_beHung.setOnTouchListener(new View.OnTouchListener() {
             float dX, dY;
             @Override
@@ -63,7 +63,7 @@ public class VatTheHung {
         });
     }
 
-    public void themVaoView () {
+    public void addToView () {
         layout.addView(this.lbl_beHung);
     }
 }
