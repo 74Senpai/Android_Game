@@ -1,8 +1,6 @@
 package com.example.gameproject;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -18,14 +16,11 @@ public class GameBase {
 
     protected AtomicInteger score = new AtomicInteger(0);
     protected AtomicInteger lifes = new AtomicInteger(5);
-
     protected TextView lbl_Score, lbl_Life;
     protected Button btnStart;
-
     protected Context context;
     protected RelativeLayout layoutGame;
     protected volatile boolean isRuning = false;
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     public GameBase(Context context, RelativeLayout layoutGame) {
         this.context = context;
@@ -43,6 +38,10 @@ public class GameBase {
         lbl_Score = new TextView(context);
         lbl_Score.setText("Score: " + score.get());
         lbl_Score.setTextSize(20);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        lbl_Score.setLayoutParams(params);
         layoutGame.addView(lbl_Score);
     }
 
@@ -87,6 +86,10 @@ public class GameBase {
     protected void startGameButton() {
         btnStart = new Button(context);
         btnStart.setText("Start Game");
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        params.addRule(RelativeLayout.CENTER_VERTICAL);
+        btnStart.setLayoutParams(params);
         layoutGame.addView(btnStart);
         score.getAndSet(0);
         lifes.getAndSet(5);
@@ -106,13 +109,15 @@ public class GameBase {
         // Lớp con override
     }
 
-    protected void stopGame(){
+    protected void stopGame() {
 
     }
+
     /**
      * Hàm kết thúc game
      */
     protected void gameOver() {
+        stopGame();
         // Lớp con override hoặc hiện thông báo
         if (btnStart != null) {
             btnStart.setVisibility(View.VISIBLE);

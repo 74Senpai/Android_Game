@@ -16,6 +16,7 @@ public class VatTheHung {
     protected Context context;
     protected float CHIEU_CAO;
     protected float CHIEU_DAI;
+    protected boolean isGameRunning = false;
 
     public VatTheHung(RelativeLayout layout_vungHung, Context context) {
         this.layout = layout_vungHung;
@@ -26,17 +27,18 @@ public class VatTheHung {
 
     public void init() {
         lbl_beHung = new TextView(this.context);
-        lbl_beHung.setText("Be hung");
-        lbl_beHung.setBackgroundColor(Color.RED);
+        lbl_beHung.setText("—————");
+        lbl_beHung.setBackgroundColor(Color.GREEN);
         lbl_beHung.setTextSize(30);
-        lbl_beHung.setX(CHIEU_DAI/2);
-        lbl_beHung.setY(CHIEU_CAO-500);
+        lbl_beHung.setX(CHIEU_DAI / 2);
+        lbl_beHung.setY(CHIEU_CAO - 500);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     public void setDragEvent() {
         lbl_beHung.setOnTouchListener(new View.OnTouchListener() {
             float dX, dY;
+
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 switch (event.getAction()) {
@@ -51,7 +53,7 @@ public class VatTheHung {
                             newX = 0;
                         }
                         if (newX + viewWidth > CHIEU_DAI) {
-                            newX = (float) (CHIEU_DAI - viewWidth);
+                            newX = CHIEU_DAI - viewWidth;
                         }
 
                         view.animate().x(newX).setDuration(0).start();
@@ -63,7 +65,7 @@ public class VatTheHung {
         });
     }
 
-    public void addToView () {
+    public void addToView() {
         layout.addView(this.lbl_beHung);
     }
 }
