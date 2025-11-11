@@ -1,5 +1,8 @@
 package com.example.gameproject;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,12 +13,12 @@ import java.util.Random;
 
 public class ThaVatTheRoi extends GameBase {
 
-    private RelativeLayout layoutVungTha;
-    private Thread threadThaVatThe;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Random random = new Random();
-
+    private final RelativeLayout layoutVungTha;
+    private Thread threadThaVatThe;
     private boolean isRunning = false;
+    private TextView lbl_beHung;
 
     public ThaVatTheRoi(Context context, RelativeLayout layoutVungTha) {
         super(context, layoutVungTha);
@@ -33,6 +36,10 @@ public class ThaVatTheRoi extends GameBase {
         score.getAndSet(0);
         lifes.getAndSet(5);
 
+        if (lbl_beHung == null) {
+            lbl_beHung = initVatTheHung();
+        }
+        lbl_beHung.setVisibility(VISIBLE);
         isRunning = true;
         initGameThread();
         threadThaVatThe.start();
@@ -40,7 +47,6 @@ public class ThaVatTheRoi extends GameBase {
     }
 
     protected void initGameThread() {
-        TextView lbl_beHung = initVatTheHung();
         threadThaVatThe = new Thread(() -> {
             int maxX = layoutVungTha.getWidth() - 100;
             while (isRunning) {
@@ -59,7 +65,7 @@ public class ThaVatTheRoi extends GameBase {
         });
     }
 
-    private void initVatTheRoi(int maxX, TextView lbl_beHung){
+    private void initVatTheRoi(int maxX, TextView lbl_beHung) {
         int randomX = random.nextInt(Math.max(maxX, 1));
         TextView lblVatThe = new TextView(context);
         lblVatThe.setText("🍺");
@@ -84,7 +90,7 @@ public class ThaVatTheRoi extends GameBase {
         lyBia.Roi();
     }
 
-    private TextView initVatTheHung(){
+    private TextView initVatTheHung() {
         VatTheHung vatTheHung = new VatTheHung(layoutVungTha, context);
         vatTheHung.init();
         vatTheHung.setDragEvent();
@@ -98,6 +104,7 @@ public class ThaVatTheRoi extends GameBase {
     @Override
     protected void stopGame() {
         isRunning = false;
+        lbl_beHung.setVisibility(GONE);
         if (threadThaVatThe != null && threadThaVatThe.isAlive()) {
             threadThaVatThe.interrupt();
         }
