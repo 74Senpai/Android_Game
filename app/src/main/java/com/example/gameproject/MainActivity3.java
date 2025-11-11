@@ -18,9 +18,7 @@ public class MainActivity3 extends AppCompatActivity {
 
         RelativeLayout layout = findViewById(R.id.layout_main);
 
-        ThaVatTheRoi thaVatTheRoi = new ThaVatTheRoi(layout, this);
-
-        thaVatTheRoi.BatDauTha();
+        ThaVatTheRoi thaVatTheRoi = new ThaVatTheRoi(this, layout);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

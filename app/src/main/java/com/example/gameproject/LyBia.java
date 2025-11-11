@@ -6,6 +6,7 @@ import android.widget.TextView;
 public class LyBia extends VatTheRoi {
 
     private TextView lbl_vungHungVatThe;
+    private GameBase GAME;
 
     public LyBia(int tocDoRoi,
                  int heSoTangToc,
@@ -14,7 +15,8 @@ public class LyBia extends VatTheRoi {
                  int diemBatDauRoiY,
                  TextView lbl_vatTheRoi,
                  RelativeLayout layout_vungTha,
-                 TextView lbl_vungHungVatThe) {
+                 TextView lbl_vungHungVatThe,
+                 GameBase game) {
 
         super(tocDoRoi,
                 heSoTangToc,
@@ -25,6 +27,7 @@ public class LyBia extends VatTheRoi {
                 layout_vungTha);
 
         this.lbl_vungHungVatThe = lbl_vungHungVatThe;
+        this.GAME = game;
     }
 
     @Override
@@ -42,6 +45,7 @@ public class LyBia extends VatTheRoi {
 
         if ((x >= beHungX_left && x <= beHungX_right) &&
                 (y >= beHungY - 20 && y <= beHungY + lbl_vungHungVatThe.getHeight())) {
+            this.GAME.updateScore(10);
             return true;
         }
 
@@ -53,6 +57,20 @@ public class LyBia extends VatTheRoi {
         this.ngungRoi();
         this.xoaVatThe();
         System.out.println("Vat the cham be hung");
+    }
+
+    @Override
+    public boolean missing(TextView lbl_vatTheRoi, float y) {
+        float beHungY = this.lbl_vungHungVatThe.getY();
+        float beHungHeight = this.lbl_vungHungVatThe.getHeight();
+        float paddingMiss = 20;
+        if ((y > (beHungY + beHungHeight + paddingMiss))
+                && lbl_vatTheRoi.isEnabled()) {
+            this.GAME.updateLifes(-1);
+            lbl_vatTheRoi.setEnabled(false);
+            return true;
+        }
+        return false;
     }
 }
 

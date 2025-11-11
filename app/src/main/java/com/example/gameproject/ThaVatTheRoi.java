@@ -8,73 +8,95 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-public class ThaVatTheRoi {
-    private RelativeLayout VUNG_THA_VAT_THE;
-    private Context context;
-    private boolean isRunning = false;
-    private Thread threadThaVatThe;
-    private final Random random = new Random();
-    private final Handler handler = new Handler(Looper.getMainLooper());
+public class ThaVatTheRoi extends GameBase {
 
-    public ThaVatTheRoi(RelativeLayout layout_vungTha, Context context) {
-        this.VUNG_THA_VAT_THE = layout_vungTha;
-        this.context = context;
+    private RelativeLayout layoutVungTha;
+    private Thread threadThaVatThe;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Random random = new Random();
+
+    private boolean isRunning = false;
+
+    public ThaVatTheRoi(Context context, RelativeLayout layoutVungTha) {
+        super(context, layoutVungTha);
+        this.layoutVungTha = layoutVungTha;
     }
 
-    /** Bắt đầu thả vật thể */
-    public void BatDauTha() {
-        if (isRunning) return; // tránh gọi nhiều lần
-        VatTheHung vatTheHung = new VatTheHung(this.VUNG_THA_VAT_THE,this.context);
-        vatTheHung.init();
-        vatTheHung.setDragEvent();
-        vatTheHung.addToView();
+    /**
+     * Override startGame() từ GameBase
+     */
+    @Override
+    protected void startGame() {
+        if (isRunning) return;
+
+        // Có thể reset score và lifes nếu cần
+        score.getAndSet(0);
+        lifes.getAndSet(5);
 
         isRunning = true;
+        initGameThread();
+        threadThaVatThe.start();
+        this.btnStart.setEnabled(false);
+    }
+
+    protected void initGameThread() {
+        TextView lbl_beHung = initVatTheHung();
         threadThaVatThe = new Thread(() -> {
+            int maxX = layoutVungTha.getWidth() - 100;
             while (isRunning) {
                 try {
-                    // Random thời gian chờ giữa 0.5 - 1s
                     long sleepTime = 500 + random.nextInt(500);
                     Thread.sleep(sleepTime);
-
-                    // Random vị trí ngang trong vùng thả
-                    int maxX = VUNG_THA_VAT_THE.getWidth() - 100; // trừ kích thước vật thể
-                    int randomX = random.nextInt(Math.max(maxX, 1));
-
-                    // Thực hiện trên UI thread
                     handler.post(() -> {
-                        TextView lbl_lyBia = new TextView(context);
-                        lbl_lyBia.setText("🍺");
-                        lbl_lyBia.setTextSize(30);
-                        lbl_lyBia.setX(randomX);
-                        lbl_lyBia.setY(0);
-
-                        VUNG_THA_VAT_THE.addView(lbl_lyBia);
-
-                        LyBia lyBia = new LyBia(
-                                4000, // tốc độ rơi (ms)
-                                1,    // hệ số tăng tốc
-                                0,    // độ dịch ngang
-                                randomX, // điểm bắt đầu X
-                                0,       // điểm bắt đầu Y
-                                lbl_lyBia,
-                                VUNG_THA_VAT_THE,
-                                vatTheHung.lbl_beHung
-                        );
-                        lyBia.khoiTaoVatThe();
-                        lyBia.Roi();
+                        initVatTheRoi(maxX, lbl_beHung);
                     });
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    stopGame();
                 }
             }
+            stopGame();
         });
-
-        threadThaVatThe.start();
     }
 
-    /** Dừng thả vật thể */
-    public void NgungTha() {
+    private void initVatTheRoi(int maxX, TextView lbl_beHung){
+        int randomX = random.nextInt(Math.max(maxX, 1));
+        TextView lblVatThe = new TextView(context);
+        lblVatThe.setText("🍺");
+        lblVatThe.setTextSize(30);
+        lblVatThe.setX(randomX);
+        lblVatThe.setY(0);
+        layoutVungTha.addView(lblVatThe);
+
+        LyBia lyBia = new LyBia(
+                4000,
+                1,
+                0,
+                randomX,
+                0,
+                lblVatThe,
+                layoutVungTha,
+                lbl_beHung,
+                this
+        );
+
+        lyBia.khoiTaoVatThe();
+        lyBia.Roi();
+    }
+
+    private TextView initVatTheHung(){
+        VatTheHung vatTheHung = new VatTheHung(layoutVungTha, context);
+        vatTheHung.init();
+        vatTheHung.setDragEvent();
+        vatTheHung.addToView();
+        return vatTheHung.lbl_beHung;
+    }
+
+    /**
+     * Dừng game
+     */
+    @Override
+    protected void stopGame() {
         isRunning = false;
         if (threadThaVatThe != null && threadThaVatThe.isAlive()) {
             threadThaVatThe.interrupt();

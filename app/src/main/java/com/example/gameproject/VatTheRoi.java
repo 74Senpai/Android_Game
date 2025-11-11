@@ -67,6 +67,8 @@ public abstract class VatTheRoi {
             boolean isDown = this.chamBeHung(currentX + chieuDai / 2, currentY + chieuCao);
             if(isDown) {
                 this.xuLyChamBeHung();
+            }else{
+                this.missing(lbl_vatTheRoi, currentY);
             }
         });
 
@@ -115,6 +117,16 @@ public abstract class VatTheRoi {
         }
     }
 
-    public abstract boolean chamBeHung(float x, float y);
-    public abstract void xuLyChamBeHung();
+    public boolean chamBeHung(float x, float y){
+      return true;
+    };
+    public void xuLyChamBeHung(){
+        //Do notinhg
+    };
+
+    public boolean missing(TextView lbl_vatTheRoi, float y){
+        //Do nothing
+        return true;
+    }
+
 }
