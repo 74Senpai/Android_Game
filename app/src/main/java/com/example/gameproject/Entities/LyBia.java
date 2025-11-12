@@ -13,20 +13,13 @@ public class LyBia extends VatTheRoi {
     public LyBia(int tocDoRoi,
                  int heSoTangToc,
                  int doDichChuyenTrucNgang,
-                 int diemBatDauRoiX,
-                 int diemBatDauRoiY,
-                 TextView lbl_vatTheRoi,
-                 RelativeLayout layout_vungTha,
                  TextView lbl_vungHungVatThe,
                  GameBase game) {
 
         super(tocDoRoi,
                 heSoTangToc,
                 doDichChuyenTrucNgang,
-                diemBatDauRoiX,
-                diemBatDauRoiY,
-                lbl_vatTheRoi,
-                layout_vungTha);
+                game.layoutGame);
 
         this.lbl_vungHungVatThe = lbl_vungHungVatThe;
         this.GAME = game;
@@ -34,9 +27,12 @@ public class LyBia extends VatTheRoi {
 
     @Override
     public void khoiTaoVatThe() {
+        lbl_vatTheRoi = new TextView(this.GAME.context);
         lbl_vatTheRoi.setText("🍺");
         lbl_vatTheRoi.setTextSize(36);
         lbl_vatTheRoi.setVisibility(TextView.VISIBLE);
+        this.GAME.layoutGame.addView(lbl_vatTheRoi);
+        this.themVatTheRoiVaoContex(lbl_vatTheRoi);
     }
 
     @Override

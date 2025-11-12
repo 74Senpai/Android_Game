@@ -9,24 +9,22 @@ import android.os.Looper;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.gameproject.Entities.Chanh;
 import com.example.gameproject.Entities.GameObjectManager;
+import com.example.gameproject.Entities.LyBia;
+import com.example.gameproject.Entities.NuocLoc;
+import com.example.gameproject.Entities.VatTheHung;
 
 import java.util.Random;
 
 public class ThaVatTheRoi extends GameBase {
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private final Random random = new Random();
-    private final RelativeLayout layoutVungTha;
-    private final GameObjectManager gameObjectManager;
-    private Thread threadThaVatThe;
     private boolean isRunning = false;
-    private TextView lbl_beHung;
+    private final android.os.Handler handler = new Handler(Looper.getMainLooper());
+    private GameObjectManager objMg;
 
     public ThaVatTheRoi(Context context, RelativeLayout layoutVungTha) {
         super(context, layoutVungTha);
-        this.layoutVungTha = layoutVungTha;
-        this.gameObjectManager = new GameObjectManager(context, layoutVungTha, this);
     }
 
     /**
@@ -35,38 +33,29 @@ public class ThaVatTheRoi extends GameBase {
     @Override
     protected void startGame() {
         if (isRunning) return;
-
         // Có thể reset score và lifes nếu cần
+        this.objMg = new GameObjectManager(context, this);
         score.getAndSet(0);
-        lives.getAndSet(5);
-
-        if (lbl_beHung == null) {
-            lbl_beHung = gameObjectManager.createVatTheHung();
-        }
-        lbl_beHung.setVisibility(VISIBLE);
+        lifes.getAndSet(5);
+        updateLifes(0);
+        updateScore(0);
         isRunning = true;
         initGameThread();
-        threadThaVatThe.start();
         this.btnStart.setEnabled(false);
     }
 
     protected void initGameThread() {
-        threadThaVatThe = new Thread(() -> {
-            int maxX = layoutVungTha.getWidth() - 100;
-            while (isRunning) {
-                try {
-                    long sleepTime = 500 + random.nextInt(500);
-                    Thread.sleep(sleepTime);
-                    handler.post(() -> {
-                        gameObjectManager.createVatTheRoi(maxX, lbl_beHung);
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    stopGame();
-                }
+        Runnable dropLoop = new Runnable() {
+            @Override
+            public void run() {
+                if (!isRunning) return;
+                long sleepTime = randomInt(500, 1000);
+                objMg.createVatTheRoi();
+                handler.postDelayed(this, sleepTime);
             }
-            stopGame();
-        });
+        };
+
+        handler.post(dropLoop);
     }
 
     /**
@@ -75,11 +64,9 @@ public class ThaVatTheRoi extends GameBase {
     @Override
     protected void stopGame() {
         isRunning = false;
-        if (lbl_beHung != null) {
-            lbl_beHung.setVisibility(GONE);
-        }
-        if (threadThaVatThe != null && threadThaVatThe.isAlive()) {
-            threadThaVatThe.interrupt();
-        }
+        objMg.anVatTheHung();
+        isRunning = false;
+        handler.removeCallbacksAndMessages(null);
     }
+
 }

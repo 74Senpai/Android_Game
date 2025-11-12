@@ -1,6 +1,10 @@
 package com.example.gameproject.Entities;
 
+import static android.view.View.GONE;
+
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -10,17 +14,75 @@ import java.util.Random;
 
 public class GameObjectManager {
     private final Context context;
-    private final RelativeLayout layoutVungTha;
+    public final RelativeLayout layoutVungTha;
     private final Random random = new Random();
     private final GameBase gameBase;
+    private final float diemTha;
+    private final int maxX;
+    private final TextView lbl_beHung;
 
-    public GameObjectManager(Context context, RelativeLayout layoutVungTha, GameBase gameBase) {
+    public GameObjectManager(Context context, GameBase gameBase) {
         this.context = context;
-        this.layoutVungTha = layoutVungTha;
+        this.layoutVungTha = gameBase.layoutGame;
         this.gameBase = gameBase;
+        this.diemTha = gameBase.getStartFallingPoint();
+        this.lbl_beHung = initVatTheHung();
+        this.maxX = layoutVungTha.getWidth() - 100;
     }
 
-    public TextView createVatTheHung() {
+    public void createVatTheRoi() {
+        initLyBia();
+        if (maxX % 5 == 0
+                && (gameBase.lifes.get() < 3 && gameBase.score.get() > 100)
+                || gameBase.score.get() > 2700) {
+            initNuocLoc();
+        }
+        if (gameBase.lifes.get() < 4
+                && lbl_beHung.getWidth() <= 200
+                && gameBase.score.get() > 500) {
+            initChanh();
+        }
+    }
+
+    private void initLyBia() {
+        int randomX = random.nextInt(Math.max(maxX, 1));
+        LyBia lyBia = new LyBia(
+                4000 - gameBase.score.get(),
+                randomX,
+                (int)diemTha,
+                lbl_beHung,
+                gameBase
+        );
+        lyBia.khoiTaoVatThe();
+        lyBia.Roi();
+    }
+
+    private void initNuocLoc(){
+        int randomX = random.nextInt(Math.max(maxX, 1));
+        NuocLoc lyNuoc = new NuocLoc(
+                2500 + gameBase.score.get(),
+                randomX,
+                (int)diemTha,
+                lbl_beHung,
+                gameBase
+        );
+        lyNuoc.khoiTaoVatThe();
+        lyNuoc.Roi();
+    }
+
+    private void initChanh(){
+        int randomX = random.nextInt(Math.max(maxX, 1));
+        Chanh quaChanh = new Chanh(
+                2000,
+                randomX,
+                0,
+                lbl_beHung,
+                gameBase
+        );
+        quaChanh.khoiTaoVatThe();
+        quaChanh.Roi();
+    }
+    private TextView initVatTheHung() {
         VatTheHung vatTheHung = new VatTheHung(layoutVungTha, context);
         vatTheHung.init();
         vatTheHung.setDragEvent();
@@ -28,28 +90,7 @@ public class GameObjectManager {
         return vatTheHung.lbl_beHung;
     }
 
-    public void createVatTheRoi(int maxX, TextView lbl_beHung) {
-        int randomX = random.nextInt(Math.max(maxX, 1));
-        TextView lblVatThe = new TextView(context);
-        lblVatThe.setText("🍺");
-        lblVatThe.setTextSize(30);
-        lblVatThe.setX(randomX);
-        lblVatThe.setY(0);
-        layoutVungTha.addView(lblVatThe);
-
-        LyBia lyBia = new LyBia(
-                4000,
-                1,
-                0,
-                randomX,
-                0,
-                lblVatThe,
-                layoutVungTha,
-                lbl_beHung,
-                gameBase
-        );
-
-        lyBia.khoiTaoVatThe();
-        lyBia.Roi();
+    public void anVatTheHung(){
+        this.lbl_beHung.setVisibility(GONE);
     }
 }

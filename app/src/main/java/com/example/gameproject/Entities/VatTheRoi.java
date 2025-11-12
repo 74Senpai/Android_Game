@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 
 public abstract class VatTheRoi {
     protected int TOC_DO_ROI;
-    protected int HE_SO_TANG_TOC;
-    protected int DO_DICH_CHUYEN_TRUC_NGANG;
     protected int DIEM_BAT_DAU_ROI_X, DIEM_BAT_DAU_ROI_Y;
     protected TextView lbl_vatTheRoi;
     protected ObjectAnimator animX, animY;
@@ -20,18 +18,12 @@ public abstract class VatTheRoi {
     protected int CHIEU_CAO;
 
     public VatTheRoi(int tocDoRoi,
-                     int heSoTangToc,
-                     int doDichChuyenTrucNgang,
                      int diemBatDauRoiX,
                      int diemBatDauRoiY,
-                     TextView lbl_vatTheRoi,
                      RelativeLayout layout_vungTha) {
         this.TOC_DO_ROI = tocDoRoi;
-        this.HE_SO_TANG_TOC = heSoTangToc;
-        this.DO_DICH_CHUYEN_TRUC_NGANG = doDichChuyenTrucNgang;
         this.DIEM_BAT_DAU_ROI_X = diemBatDauRoiX;
         this.DIEM_BAT_DAU_ROI_Y = diemBatDauRoiY;
-        this.lbl_vatTheRoi = lbl_vatTheRoi;
         this.VUNG_THA = layout_vungTha;
         this.CHIEU_CAO = Resources.getSystem().getDisplayMetrics().heightPixels;
     }
@@ -41,6 +33,9 @@ public abstract class VatTheRoi {
      */
     public abstract void khoiTaoVatThe();
 
+    public void themVatTheRoiVaoContex(TextView lbl_vatTheRoi){
+        this.lbl_vatTheRoi = lbl_vatTheRoi;
+    }
     /**
      * Cho vật thể rơi
      */
@@ -50,7 +45,7 @@ public abstract class VatTheRoi {
 
         // Tạo chuyển động rơi
         animX = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationX",
-                DIEM_BAT_DAU_ROI_X + DO_DICH_CHUYEN_TRUC_NGANG);
+                DIEM_BAT_DAU_ROI_X);
         animY = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationY",
                 CHIEU_CAO - 50); // điểm kết thúc rơi (tùy độ cao màn hình)
 

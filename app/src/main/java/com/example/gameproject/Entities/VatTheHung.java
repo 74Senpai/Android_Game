@@ -26,11 +26,10 @@ public class VatTheHung {
 
     public void init() {
         lbl_beHung = new TextView(this.context);
-        lbl_beHung.setText("—————");
         lbl_beHung.setBackgroundColor(Color.GREEN);
-        lbl_beHung.setTextSize(30);
+        lbl_beHung.setWidth(100);
         lbl_beHung.setX(CHIEU_DAI / 2);
-        lbl_beHung.setY(CHIEU_CAO - 500);
+        lbl_beHung.setY(CHIEU_CAO - 200);
     }
 
     @SuppressLint("ClickableViewAccessibility")
