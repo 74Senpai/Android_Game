@@ -1,4 +1,4 @@
-package com.example.gameproject;
+package com.example.gameproject.Entities;
 
 
 import android.annotation.SuppressLint;
@@ -16,7 +16,6 @@ public class VatTheHung {
     protected Context context;
     protected float CHIEU_CAO;
     protected float CHIEU_DAI;
-    protected boolean isGameRunning = false;
 
     public VatTheHung(RelativeLayout layout_vungHung, Context context) {
         this.layout = layout_vungHung;

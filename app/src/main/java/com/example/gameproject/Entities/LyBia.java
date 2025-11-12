@@ -1,12 +1,14 @@
-package com.example.gameproject;
+package com.example.gameproject.Entities;
 
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.gameproject.GameBase;
+
 public class LyBia extends VatTheRoi {
 
-    private TextView lbl_vungHungVatThe;
-    private GameBase GAME;
+    private final TextView lbl_vungHungVatThe;
+    private final GameBase GAME;
 
     public LyBia(int tocDoRoi,
                  int heSoTangToc,
