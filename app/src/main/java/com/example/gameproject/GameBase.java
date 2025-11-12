@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GameBase {
 
     protected AtomicInteger score = new AtomicInteger(0);
-    protected AtomicInteger lifes = new AtomicInteger(5);
+    protected AtomicInteger lives = new AtomicInteger(5);
     protected TextView lbl_Score, lbl_Life;
     protected Button btnStart;
     protected Context context;
@@ -48,7 +48,7 @@ public class GameBase {
     /**
      * Cập nhật điểm
      */
-    protected void updateScore(int delta) {
+    public void updateScore(int delta) {
         score.addAndGet(delta);
         if (score.get() < 0) score.set(0);
         if (lbl_Score != null) {
@@ -61,7 +61,7 @@ public class GameBase {
      */
     protected void initLifesBar() {
         lbl_Life = new TextView(context);
-        lbl_Life.setText("Lifes: " + lifes.get());
+        lbl_Life.setText("Lifes: " + lives.get());
         lbl_Life.setTextSize(20);
         layoutGame.addView(lbl_Life);
     }
@@ -69,14 +69,14 @@ public class GameBase {
     /**
      * Cập nhật tim
      */
-    protected void updateLifes(int delta) {
-        lifes.addAndGet(delta);
-        if (lifes.get() < 0) {
-            lifes.getAndSet(0);
+    public void updateLifes(int delta) {
+        lives.addAndGet(delta);
+        if (lives.get() < 0) {
+            lives.getAndSet(0);
             gameOver();
         }
         if (lbl_Life != null) {
-            lbl_Life.setText("Lifes: " + lifes.get());
+            lbl_Life.setText("Lifes: " + lives.get());
         }
     }
 
@@ -92,7 +92,7 @@ public class GameBase {
         btnStart.setLayoutParams(params);
         layoutGame.addView(btnStart);
         score.getAndSet(0);
-        lifes.getAndSet(5);
+        lives.getAndSet(5);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

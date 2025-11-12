@@ -2,6 +2,7 @@ package com.example.gameproject;
 
 import android.os.Bundle;
 import android.widget.RelativeLayout;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;

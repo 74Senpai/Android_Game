@@ -1,4 +1,4 @@
-package com.example.gameproject;
+package com.example.gameproject.Entities;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -52,7 +52,7 @@ public abstract class VatTheRoi {
         animX = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationX",
                 DIEM_BAT_DAU_ROI_X + DO_DICH_CHUYEN_TRUC_NGANG);
         animY = ObjectAnimator.ofFloat(lbl_vatTheRoi, "translationY",
-                CHIEU_CAO-50); // điểm kết thúc rơi (tùy độ cao màn hình)
+                CHIEU_CAO - 50); // điểm kết thúc rơi (tùy độ cao màn hình)
 
         animX.setDuration(TOC_DO_ROI);
         animY.setDuration(TOC_DO_ROI);
@@ -65,9 +65,9 @@ public abstract class VatTheRoi {
             float currentX = lbl_vatTheRoi.getX();
             float currentY = lbl_vatTheRoi.getY();
             boolean isDown = this.chamBeHung(currentX + chieuDai / 2, currentY + chieuCao);
-            if(isDown) {
+            if (isDown) {
                 this.xuLyChamBeHung();
-            }else{
+            } else {
                 this.missing(lbl_vatTheRoi, currentY);
             }
         });
@@ -117,14 +117,15 @@ public abstract class VatTheRoi {
         }
     }
 
-    public boolean chamBeHung(float x, float y){
-      return true;
-    };
-    public void xuLyChamBeHung(){
-        //Do notinhg
-    };
+    public boolean chamBeHung(float x, float y) {
+        return true;
+    }
 
-    public boolean missing(TextView lbl_vatTheRoi, float y){
+    public void xuLyChamBeHung() {
+        //Do notinhg
+    }
+
+    public boolean missing(TextView lbl_vatTheRoi, float y) {
         //Do nothing
         return true;
     }
