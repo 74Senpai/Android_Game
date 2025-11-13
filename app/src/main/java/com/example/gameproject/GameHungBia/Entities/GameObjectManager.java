@@ -34,7 +34,7 @@ public class GameObjectManager {
 
     public void createVatTheRoi() {
         int score = gameBase.score.get();
-        int live = gameBase.score.get();
+        int live = gameBase.lifes.get();
         initLyBia();
         if ((live < 3 && score > 100) || score > 2700) {
             initNuocLoc();
