@@ -32,7 +32,14 @@ public class GameBase {
     protected Button btnStart;
     protected GameDBHelper dbHelper;
     private float layoutWidth;
+    enum GAME_STATE {
+        STOP,
+        RUNNING,
+        OVER,
+        WAIT,
+    }
 
+    private GAME_STATE currentState = GAME_STATE.WAIT;
 
     public GameBase(Context context, RelativeLayout layoutGame) {
         this.context = context;
@@ -111,6 +118,7 @@ public class GameBase {
      * Cập nhật điểm
      */
     public void updateScore(int delta) {
+        if(this.currentState != GAME_STATE.RUNNING) return;
         score.addAndGet(delta);
         if (score.get() < 0) score.set(0);
         if (lbl_Score != null) {
@@ -123,6 +131,7 @@ public class GameBase {
      * Cập nhật tim
      */
     public void updateLifes(int delta) {
+        if(this.currentState != GAME_STATE.RUNNING) return;
         int heartCount = lifes.addAndGet(delta);
         if (heartCount < 1) {
             heartCount = 0;
@@ -139,6 +148,7 @@ public class GameBase {
     }
 
     protected void updateProcessBar(int delta) {
+        if(this.currentState != GAME_STATE.RUNNING) return;
         if (lbl_Process != null) {
             int newWidth = Math.max((int) (layoutWidth * delta / 100.0), 50);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lbl_Process.getLayoutParams();
@@ -151,6 +161,8 @@ public class GameBase {
      * Khởi tạo nút Start Game
      */
     protected void startGameButton() {
+        if(this.currentState == GAME_STATE.RUNNING) return;
+        this.currentState = GAME_STATE.RUNNING;
         btnStart = new Button(context);
         btnStart.setText("Start Game");
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -183,31 +195,37 @@ public class GameBase {
      * Hàm kết thúc game
      */
     protected void gameOver() {
+        if (this.currentState == GAME_STATE.OVER) return;
+        this.currentState = GAME_STATE.STOP;
         stopGame();
         saveScore(score.get());
         showGameOverDialog(score.get());
-        if (btnStart != null) {
-            btnStart.setVisibility(View.VISIBLE);
-            btnStart.setEnabled(true);
-        }
+//        if (btnStart != null) {
+//            btnStart.setVisibility(View.VISIBLE);
+//            btnStart.setEnabled(true);
+//        }
+        this.currentState = GAME_STATE.OVER;
     }
 
     protected void resetGame() {
+        if(this.currentState == GAME_STATE.RUNNING) return;
+        this.currentState = GAME_STATE.RUNNING;
         score.set(0);
         lifes.set(5);
 
         // Update UI
-        lbl_Score.setText("Score : " + score.get());
-        lbl_Life.setText(heart.repeat(lifes.get()));
+        updateLifes(0);
+        updateScore(0);
         updateProcessBar(0);
 
-        if (btnStart != null) {
-            btnStart.setVisibility(View.INVISIBLE);
-        }
+//        if (btnStart != null) {
+//            btnStart.setVisibility(View.INVISIBLE);
+//        }
         startGame();
     }
 
     protected void showGameOverDialog(int currentScore) {
+        if(this.currentState != GAME_STATE.STOP) return;
         int highScore = dbHelper.getHighScore();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Game Over");
