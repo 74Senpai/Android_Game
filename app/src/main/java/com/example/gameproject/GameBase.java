@@ -260,14 +260,35 @@ public class GameBase {
     /**
      * Random số nguyên trong khoảng [min, max]
      */
-    protected int randomInt(int min, int max) {
+    public int randomInt(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
 
     /**
      * Random số thực trong khoảng [min, max]
      */
-    protected float randomFloat(float min, float max) {
+    public float randomFloat(float min, float max) {
         return min + random.nextFloat() * (max - min);
+    }
+
+    public enum EntityType {
+        GOOD, BAD, HYBRID, DEFAULT;
+    }
+    public int fallingSpeed(EntityType type){
+        int score = this.score.get();
+        int life = this.lifes.get();
+        switch (type){
+            case GOOD:
+                return 500 * life + score;
+            case BAD:
+                return Math.max( 4000 - score, score * life);
+            case HYBRID:
+                return Math.max(4000 - score * life, score * life);
+            case DEFAULT:
+                return Math.max(4000 - score, 1000);
+            default:
+                return randomInt(1000, 4000);
+        }
+
     }
 }

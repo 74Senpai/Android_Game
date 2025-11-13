@@ -31,23 +31,24 @@ public class GameObjectManager {
     }
 
     public void createVatTheRoi() {
+        int score = gameBase.score.get();
+        int live = gameBase.score.get();
         initLyBia();
-        if (maxX % 5 == 0
-                && (gameBase.lifes.get() < 3 && gameBase.score.get() > 100)
-                || gameBase.score.get() > 2700) {
+        if (maxX % 5 == 0 && (live < 3 && score > 100) || score > 2700) {
             initNuocLoc();
         }
-        if (gameBase.lifes.get() < 4
-                && lbl_beHung.getWidth() <= 200
-                && gameBase.score.get() > 500) {
+        if (live < 4 && lbl_beHung.getWidth() <= 200 && score > 500) {
             initChanh();
+        }
+        if(score > 3000){
+            initBom();
         }
     }
 
     private void initLyBia() {
         int randomX = random.nextInt(Math.max(maxX, 1));
         LyBia lyBia = new LyBia(
-                4000 - gameBase.score.get(),
+                gameBase.fallingSpeed(GameBase.EntityType.DEFAULT),
                 randomX,
                 (int)diemTha,
                 lbl_beHung,
@@ -60,7 +61,7 @@ public class GameObjectManager {
     private void initNuocLoc(){
         int randomX = random.nextInt(Math.max(maxX, 1));
         NuocLoc lyNuoc = new NuocLoc(
-                2500 + gameBase.score.get(),
+                gameBase.fallingSpeed(GameBase.EntityType.HYBRID),
                 randomX,
                 (int)diemTha,
                 lbl_beHung,
@@ -73,7 +74,7 @@ public class GameObjectManager {
     private void initChanh(){
         int randomX = random.nextInt(Math.max(maxX, 1));
         Chanh quaChanh = new Chanh(
-                2000,
+                gameBase.fallingSpeed(GameBase.EntityType.GOOD),
                 randomX,
                 0,
                 lbl_beHung,
@@ -81,6 +82,19 @@ public class GameObjectManager {
         );
         quaChanh.khoiTaoVatThe();
         quaChanh.Roi();
+    }
+
+    private void initBom(){
+        int randomX = random.nextInt(Math.max(maxX, 1));
+        Bom quaBom = new Bom(
+                gameBase.fallingSpeed(GameBase.EntityType.BAD),
+                randomX,
+                0,
+                lbl_beHung,
+                gameBase
+        );
+        quaBom.khoiTaoVatThe();
+        quaBom.Roi();
     }
     private TextView initVatTheHung() {
         VatTheHung vatTheHung = new VatTheHung(layoutVungTha, context);
