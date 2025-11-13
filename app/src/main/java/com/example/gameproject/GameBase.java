@@ -2,16 +2,16 @@ package com.example.gameproject;
 
 import static android.view.View.TEXT_ALIGNMENT_TEXT_END;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,20 +22,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class GameBase {
 
+    private final Random random = new Random();
+    private final String heart = "💖";
     public AtomicInteger score = new AtomicInteger(0);
     public AtomicInteger lifes = new AtomicInteger(5);
-    private final Random random = new Random();
-    protected TextView lbl_Score, lbl_Life, lbl_Process;
-    protected Button btnStart;
     public Context context;
     public RelativeLayout layoutGame;
-    protected volatile boolean isRuning = false;
-    private String heart = "💖";
+    protected TextView lbl_Score, lbl_Life, lbl_Process;
+    protected Button btnStart;
+    protected GameDBHelper dbHelper;
     private float layoutWidth;
+
 
     public GameBase(Context context, RelativeLayout layoutGame) {
         this.context = context;
         this.layoutGame = layoutGame;
+        this.dbHelper = new GameDBHelper(context);
 
         //Đợi vẽ xong layout rồi mới tạo
         layoutGame.post(() -> {
@@ -47,8 +49,8 @@ public class GameBase {
 
     }
 
-    public float getStartFallingPoint(){
-       return lbl_Score.getY();
+    public float getStartFallingPoint() {
+        return lbl_Score.getY();
     }
 
     protected void initProcessBar() {
@@ -112,7 +114,7 @@ public class GameBase {
         score.addAndGet(delta);
         if (score.get() < 0) score.set(0);
         if (lbl_Score != null) {
-            lbl_Score.setText("Score : "+score.get());
+            lbl_Score.setText("Score : " + score.get());
             updateProcessBar(score.get() * 100 / 4000);
         }
     }
@@ -122,14 +124,15 @@ public class GameBase {
      */
     public void updateLifes(int delta) {
         int heartCount = lifes.addAndGet(delta);
-        if (heartCount  < 1) {
+        if (heartCount < 1) {
+            heartCount = 0;
             lifes.getAndSet(0);
             gameOver();
         }
         if (lbl_Life != null) {
-            if(heartCount  > 5){
-                lbl_Life.setText(heart.repeat(5)+"💛".repeat(heartCount - 5));
-            }else{
+            if (heartCount > 5) {
+                lbl_Life.setText(heart.repeat(5) + "💛".repeat(heartCount - 5));
+            } else {
                 lbl_Life.setText(heart.repeat(heartCount));
             }
         }
@@ -174,7 +177,6 @@ public class GameBase {
     }
 
     protected void stopGame() {
-
     }
 
     /**
@@ -182,19 +184,71 @@ public class GameBase {
      */
     protected void gameOver() {
         stopGame();
-        // Lớp con override hoặc hiện thông báo
+        saveScore(score.get());
+        showGameOverDialog(score.get());
         if (btnStart != null) {
             btnStart.setVisibility(View.VISIBLE);
             btnStart.setEnabled(true);
         }
     }
 
-    /** Random số nguyên trong khoảng [min, max] */
+    protected void resetGame() {
+        score.set(0);
+        lifes.set(5);
+
+        // Update UI
+        lbl_Score.setText("Score : " + score.get());
+        lbl_Life.setText(heart.repeat(lifes.get()));
+        updateProcessBar(0);
+
+        if (btnStart != null) {
+            btnStart.setVisibility(View.INVISIBLE);
+        }
+        startGame();
+    }
+
+    protected void showGameOverDialog(int currentScore) {
+        int highScore = dbHelper.getHighScore();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Game Over");
+        builder.setCancelable(false);
+        builder.setMessage("Điểm của bạn: " + currentScore + "\nKỉ lục: " + highScore);
+        builder.setPositiveButton("Chơi lại", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                resetGame();
+            }
+        });
+        builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                if (context instanceof Activity) {
+                    ((Activity) context).finish();
+                }
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Lưu điểm vào database
+     */
+    protected void saveScore(int score) {
+        dbHelper.addScore(score);
+    }
+
+
+    /**
+     * Random số nguyên trong khoảng [min, max]
+     */
     protected int randomInt(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
 
-    /** Random số thực trong khoảng [min, max] */
+    /**
+     * Random số thực trong khoảng [min, max]
+     */
     protected float randomFloat(float min, float max) {
         return min + random.nextFloat() * (max - min);
     }
