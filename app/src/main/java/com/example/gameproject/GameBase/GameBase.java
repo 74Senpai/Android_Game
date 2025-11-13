@@ -278,9 +278,9 @@ public class GameBase {
             case GOOD:
                 return 500 * life + score;
             case BAD:
-                return Math.max(4000 - score, score * life);
+                return Math.max(1000, 4000 - score);
             case HYBRID:
-                return Math.max(4000 - score * life, score * life);
+                return Math.max(1500, 4000 - score);
             case DEFAULT:
                 return Math.max(4000 - score, 1000);
             default:
