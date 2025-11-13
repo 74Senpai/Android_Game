@@ -1,4 +1,4 @@
-package com.example.gameproject;
+package com.example.gameproject.UIActivity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ public enum ChoiceGame {
         return UIName;
     }
 
-    public static ChoiceGame findByUIName(String UIName) throws Exception{
+    public static ChoiceGame findByUIName(String UIName) throws IllegalArgumentException{
         for(ChoiceGame choiceGame: values()){
             if (choiceGame.getUIName().equals(UIName)){
                 return  choiceGame;

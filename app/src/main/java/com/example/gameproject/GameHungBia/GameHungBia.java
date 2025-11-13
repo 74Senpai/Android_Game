@@ -1,29 +1,20 @@
-package com.example.gameproject;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
+package com.example.gameproject.GameHungBia;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.example.gameproject.Entities.Chanh;
-import com.example.gameproject.Entities.GameObjectManager;
-import com.example.gameproject.Entities.LyBia;
-import com.example.gameproject.Entities.NuocLoc;
-import com.example.gameproject.Entities.VatTheHung;
+import com.example.gameproject.GameHungBia.Entities.GameObjectManager;
+import com.example.gameproject.GameBase.GameBase;
 
-import java.util.Random;
-
-public class ThaVatTheRoi extends GameBase {
+public class GameHungBia extends GameBase {
 
     private boolean isRunning = false;
     private final android.os.Handler handler = new Handler(Looper.getMainLooper());
     private GameObjectManager objMg;
 
-    public ThaVatTheRoi(Context context, RelativeLayout layoutVungTha) {
+    public GameHungBia(Context context, RelativeLayout layoutVungTha) {
         super(context, layoutVungTha);
     }
 

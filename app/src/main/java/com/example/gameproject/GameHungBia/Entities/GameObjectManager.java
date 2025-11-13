@@ -1,14 +1,15 @@
-package com.example.gameproject.Entities;
+package com.example.gameproject.GameHungBia.Entities;
 
 import static android.view.View.GONE;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.example.gameproject.GameBase;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.Bom;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.Chanh;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.LyBia;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.NuocLoc;
+import com.example.gameproject.GameBase.GameBase;
 
 import java.util.Random;
 
@@ -19,28 +20,29 @@ public class GameObjectManager {
     private final GameBase gameBase;
     private final float diemTha;
     private final int maxX;
-    private final TextView lbl_beHung;
+    private VatTheHung vatTheHung;
 
     public GameObjectManager(Context context, GameBase gameBase) {
         this.context = context;
         this.layoutVungTha = gameBase.layoutGame;
         this.gameBase = gameBase;
         this.diemTha = gameBase.getStartFallingPoint();
-        this.lbl_beHung = initVatTheHung();
         this.maxX = layoutVungTha.getWidth() - 100;
+
+        initVatTheHung();
     }
 
     public void createVatTheRoi() {
         int score = gameBase.score.get();
         int live = gameBase.score.get();
         initLyBia();
-        if (maxX % 5 == 0 && (live < 3 && score > 100) || score > 2700) {
+        if ((live < 3 && score > 100) || score > 2700) {
             initNuocLoc();
         }
-        if (live < 4 && lbl_beHung.getWidth() <= 200 && score > 500) {
+        if (live < 4 && vatTheHung.lbl_beHung.getWidth() <= 200 && score > 500) {
             initChanh();
         }
-        if(score > 3000){
+        if(score > 100){
             initBom();
         }
     }
@@ -51,7 +53,7 @@ public class GameObjectManager {
                 gameBase.fallingSpeed(GameBase.EntityType.DEFAULT),
                 randomX,
                 (int)diemTha,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         lyBia.khoiTaoVatThe();
@@ -64,7 +66,7 @@ public class GameObjectManager {
                 gameBase.fallingSpeed(GameBase.EntityType.HYBRID),
                 randomX,
                 (int)diemTha,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         lyNuoc.khoiTaoVatThe();
@@ -77,7 +79,7 @@ public class GameObjectManager {
                 gameBase.fallingSpeed(GameBase.EntityType.GOOD),
                 randomX,
                 0,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         quaChanh.khoiTaoVatThe();
@@ -90,21 +92,20 @@ public class GameObjectManager {
                 gameBase.fallingSpeed(GameBase.EntityType.BAD),
                 randomX,
                 0,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         quaBom.khoiTaoVatThe();
         quaBom.Roi();
     }
-    private TextView initVatTheHung() {
-        VatTheHung vatTheHung = new VatTheHung(layoutVungTha, context);
+    private void initVatTheHung() {
+        this.vatTheHung = new VatTheHung(layoutVungTha, context, 360, 100);
         vatTheHung.init();
         vatTheHung.setDragEvent();
         vatTheHung.addToView();
-        return vatTheHung.lbl_beHung;
     }
 
     public void anVatTheHung(){
-        this.lbl_beHung.setVisibility(GONE);
+        this.vatTheHung.lbl_beHung.setVisibility(GONE);
     }
 }

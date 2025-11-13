@@ -1,4 +1,4 @@
-package com.example.gameproject.Entities;
+package com.example.gameproject.GameHungBia.Entities;
 
 
 import android.annotation.SuppressLint;
@@ -16,18 +16,25 @@ public class VatTheHung {
     protected Context context;
     protected float CHIEU_CAO;
     protected float CHIEU_DAI;
+    private final float layoutWidth;
+    private final int maxWidth;
+    private final int minWidth;
 
-    public VatTheHung(RelativeLayout layout_vungHung, Context context) {
+    public VatTheHung(RelativeLayout layout_vungHung, Context context,
+                      int maxWidth, int minWidth) {
         this.layout = layout_vungHung;
         this.context = context;
         this.CHIEU_CAO = Resources.getSystem().getDisplayMetrics().heightPixels;
         this.CHIEU_DAI = Resources.getSystem().getDisplayMetrics().widthPixels;
+        this.layoutWidth = this.layout.getWidth();
+        this.maxWidth = maxWidth;
+        this.minWidth = minWidth;
     }
 
     public void init() {
         lbl_beHung = new TextView(this.context);
         lbl_beHung.setBackgroundColor(Color.GREEN);
-        lbl_beHung.setWidth(200);
+        lbl_beHung.setWidth((int)(maxWidth + minWidth) / 2);
         lbl_beHung.setX(CHIEU_DAI / 2);
         lbl_beHung.setY(CHIEU_CAO - 500);
     }
@@ -65,5 +72,10 @@ public class VatTheHung {
 
     public void addToView() {
         layout.addView(this.lbl_beHung);
+    }
+    public void updateWidth(int newWidth){
+        if (newWidth > maxWidth) newWidth = maxWidth;
+        else if(newWidth < minWidth) newWidth = minWidth;
+        lbl_beHung.setWidth(newWidth);
     }
 }

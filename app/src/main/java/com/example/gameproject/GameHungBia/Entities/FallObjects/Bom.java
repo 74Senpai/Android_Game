@@ -1,20 +1,20 @@
-package com.example.gameproject.Entities;
+package com.example.gameproject.GameHungBia.Entities.FallObjects;
 
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.gameproject.GameBase;
+import com.example.gameproject.GameHungBia.Entities.VatTheHung;
+import com.example.gameproject.GameBase.GameBase;
 
-public class Chanh extends VatTheRoi {
+public class Bom extends VatTheRoi {
 
     private TextView lbl_vungHungVatThe;
     private final GameBase GAME;
     protected TextView lbl_vatTheRoi;
 
-    public Chanh(int tocDoRoi,
+    public Bom(int tocDoRoi,
                  int diemBatDauRoiX,
                  int diemBatDauRoiY,
-                 TextView lbl_vungHungVatThe,
+                 VatTheHung vatTheHung,
                  GameBase game) {
 
         super(tocDoRoi,
@@ -22,14 +22,14 @@ public class Chanh extends VatTheRoi {
                 diemBatDauRoiY,
                 game.layoutGame);
 
-        this.lbl_vungHungVatThe = lbl_vungHungVatThe;
+        this.lbl_vungHungVatThe = vatTheHung.lbl_beHung;
         this.GAME = game;
     }
 
     @Override
     public void khoiTaoVatThe() {
         lbl_vatTheRoi = new TextView(this.GAME.context);
-        lbl_vatTheRoi.setText("🍋");
+        lbl_vatTheRoi.setText("💣");
         lbl_vatTheRoi.setTextSize(36);
         lbl_vatTheRoi.setVisibility(TextView.VISIBLE);
         this.GAME.layoutGame.addView(lbl_vatTheRoi);
@@ -45,9 +45,7 @@ public class Chanh extends VatTheRoi {
 
         if ((x >= beHungX_left && x <= beHungX_right) &&
                 (y >= beHungY - 20 && y <= beHungY + lbl_vungHungVatThe.getHeight())) {
-            int addWidth = (int)beHungWidth + 10;
-            addWidth = Math.min(addWidth, 200);
-            lbl_vungHungVatThe.setWidth(addWidth);
+            this.GAME.updateLifes(Integer.MIN_VALUE);
             return true;
         }
 
@@ -58,6 +56,5 @@ public class Chanh extends VatTheRoi {
     public void xuLyChamBeHung() {
         this.ngungRoi();
         this.xoaVatThe();
-        System.out.println("Vat the cham be hung");
     }
 }

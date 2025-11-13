@@ -1,9 +1,9 @@
-package com.example.gameproject.Entities;
+package com.example.gameproject.GameHungBia.Entities.FallObjects;
 
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.gameproject.GameBase;
+import com.example.gameproject.GameHungBia.Entities.VatTheHung;
+import com.example.gameproject.GameBase.GameBase;
 
 public class LyBia extends VatTheRoi {
 
@@ -13,7 +13,7 @@ public class LyBia extends VatTheRoi {
     public LyBia(int tocDoRoi,
                  int heSoTangToc,
                  int doDichChuyenTrucNgang,
-                 TextView lbl_vungHungVatThe,
+                 VatTheHung vatTheHung,
                  GameBase game) {
 
         super(tocDoRoi,
@@ -21,7 +21,7 @@ public class LyBia extends VatTheRoi {
                 doDichChuyenTrucNgang,
                 game.layoutGame);
 
-        this.lbl_vungHungVatThe = lbl_vungHungVatThe;
+        this.lbl_vungHungVatThe = vatTheHung.lbl_beHung;
         this.GAME = game;
     }
 
