@@ -1,6 +1,6 @@
 # Android_Game
 
-> Dự án game Android đơn giản — bạn vui, người chơi nhảy, và bug thì… ít đi (hy vọng vậy 😄)
+> Dự án game Android đơn giản
 
 ## Mô tả
 
@@ -15,25 +15,26 @@ Bạn có thể coi nó như một khung để phát triển game nhỏ, hoặc 
 
 ## Cấu trúc thư mục chính
 
-Dưới đây là các thành phần nổi bật từ repository:
-
 ```
-├───.gradle
-├───.idea
-├───app
-│   ├───build
-│   └───src
-│       ├───androidTest
-│       │   └───java
-│       │       └───com
-│       │           └───example
-│       │               └───gameproject
-│       ├───main
-│       │   ├───java
-│       │   └───res
-│       └───test
-├───build
-└───gradle
+GameBase/
+│   GameBase.class
+│   GameBase$1.class
+│   GameBase$2.class
+│
+├── GameHungBia/
+│   ├── GameHungBia.class
+│   ├── Entities/
+│   │   ├── GameObjectManager.class
+│   │   ├── VatTheHung.class
+│   │   └── FallObjects/
+│   │       ├── Bom.class
+│   │       ├── Chanh.class
+│   │       └── LyBia.class
+│
+└── UIActivity/
+    ├── MainActivity.class
+    ├── MainActivity2.class
+    └── MainActivity3.class
 ```
 
 Giải thích nhanh:
@@ -79,8 +80,6 @@ Nếu bạn hoặc người khác muốn đóng góp:
 
 * Fork repository, tạo branch mới, viết tính năng hoặc sửa bug, sau đó gửi Pull Request.
 * Mở Issue nếu phát hiện lỗi hoặc muốn đề xuất tính năng mới.
-* Đặt tên và comment code rõ ràng để người khác dễ hiểu.
-
 
 ## Kết
 
