@@ -1,14 +1,15 @@
-package com.example.gameproject.Entities;
+package com.example.gameproject.GameHungBia.Entities;
 
 import static android.view.View.GONE;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.example.gameproject.GameBase;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.Bom;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.Chanh;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.LyBia;
+import com.example.gameproject.GameHungBia.Entities.FallObjects.NuocLoc;
+import com.example.gameproject.GameBase.GameBase;
 
 import java.util.Random;
 
@@ -19,38 +20,40 @@ public class GameObjectManager {
     private final GameBase gameBase;
     private final float diemTha;
     private final int maxX;
-    private final TextView lbl_beHung;
+    private VatTheHung vatTheHung;
 
     public GameObjectManager(Context context, GameBase gameBase) {
         this.context = context;
         this.layoutVungTha = gameBase.layoutGame;
         this.gameBase = gameBase;
         this.diemTha = gameBase.getStartFallingPoint();
-        this.lbl_beHung = initVatTheHung();
         this.maxX = layoutVungTha.getWidth() - 100;
+
+        initVatTheHung();
     }
 
     public void createVatTheRoi() {
+        int score = gameBase.score.get();
+        int live = gameBase.lifes.get();
         initLyBia();
-        if (maxX % 5 == 0
-                && (gameBase.lifes.get() < 3 && gameBase.score.get() > 100)
-                || gameBase.score.get() > 2700) {
+        if ((live < 3 && score > 100) || score > 2700) {
             initNuocLoc();
         }
-        if (gameBase.lifes.get() < 4
-                && lbl_beHung.getWidth() <= 200
-                && gameBase.score.get() > 500) {
+        if (live < 4 && vatTheHung.lbl_beHung.getWidth() <= 200 && score > 500) {
             initChanh();
+        }
+        if(score > 100){
+            initBom();
         }
     }
 
     private void initLyBia() {
         int randomX = random.nextInt(Math.max(maxX, 1));
         LyBia lyBia = new LyBia(
-                4000 - gameBase.score.get(),
+                gameBase.fallingSpeed(GameBase.EntityType.DEFAULT),
                 randomX,
                 (int)diemTha,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         lyBia.khoiTaoVatThe();
@@ -60,10 +63,10 @@ public class GameObjectManager {
     private void initNuocLoc(){
         int randomX = random.nextInt(Math.max(maxX, 1));
         NuocLoc lyNuoc = new NuocLoc(
-                2500 + gameBase.score.get(),
+                gameBase.fallingSpeed(GameBase.EntityType.HYBRID),
                 randomX,
                 (int)diemTha,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         lyNuoc.khoiTaoVatThe();
@@ -73,24 +76,36 @@ public class GameObjectManager {
     private void initChanh(){
         int randomX = random.nextInt(Math.max(maxX, 1));
         Chanh quaChanh = new Chanh(
-                2000,
+                gameBase.fallingSpeed(GameBase.EntityType.GOOD),
                 randomX,
                 0,
-                lbl_beHung,
+                vatTheHung,
                 gameBase
         );
         quaChanh.khoiTaoVatThe();
         quaChanh.Roi();
     }
-    private TextView initVatTheHung() {
-        VatTheHung vatTheHung = new VatTheHung(layoutVungTha, context);
+
+    private void initBom(){
+        int randomX = random.nextInt(Math.max(maxX, 1));
+        Bom quaBom = new Bom(
+                gameBase.fallingSpeed(GameBase.EntityType.BAD),
+                randomX,
+                0,
+                vatTheHung,
+                gameBase
+        );
+        quaBom.khoiTaoVatThe();
+        quaBom.Roi();
+    }
+    private void initVatTheHung() {
+        this.vatTheHung = new VatTheHung(layoutVungTha, context, 360, 100);
         vatTheHung.init();
         vatTheHung.setDragEvent();
         vatTheHung.addToView();
-        return vatTheHung.lbl_beHung;
     }
 
     public void anVatTheHung(){
-        this.lbl_beHung.setVisibility(GONE);
+        this.vatTheHung.lbl_beHung.setVisibility(GONE);
     }
 }

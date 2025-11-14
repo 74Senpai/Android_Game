@@ -1,4 +1,4 @@
-package com.example.gameproject;
+package com.example.gameproject.GameBase;
 
 import static android.view.View.TEXT_ALIGNMENT_TEXT_END;
 
@@ -13,6 +13,10 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.gameproject.Database.GameDBHelper;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,12 +36,12 @@ public class GameBase {
     protected Button btnStart;
     protected GameDBHelper dbHelper;
     private float layoutWidth;
-    enum GAME_STATE {
-        STOP,
-        RUNNING,
-        OVER,
-        WAIT,
-    }
+
+    public enum GAME_STATE {STOP, RUNNING, OVER, WAIT}
+
+    public enum EntityType {GOOD, BAD, HYBRID, DEFAULT}
+
+    Map<String, Integer> GAME_PHASE = new HashMap<>();
 
     private GAME_STATE currentState = GAME_STATE.WAIT;
 
@@ -118,7 +122,7 @@ public class GameBase {
      * Cập nhật điểm
      */
     public void updateScore(int delta) {
-        if(this.currentState != GAME_STATE.RUNNING) return;
+        if (this.currentState != GAME_STATE.RUNNING) return;
         score.addAndGet(delta);
         if (score.get() < 0) score.set(0);
         if (lbl_Score != null) {
@@ -131,7 +135,7 @@ public class GameBase {
      * Cập nhật tim
      */
     public void updateLifes(int delta) {
-        if(this.currentState != GAME_STATE.RUNNING) return;
+        if (this.currentState != GAME_STATE.RUNNING) return;
         int heartCount = lifes.addAndGet(delta);
         if (heartCount < 1) {
             heartCount = 0;
@@ -148,7 +152,7 @@ public class GameBase {
     }
 
     protected void updateProcessBar(int delta) {
-        if(this.currentState != GAME_STATE.RUNNING) return;
+        if (this.currentState != GAME_STATE.RUNNING) return;
         if (lbl_Process != null) {
             int newWidth = Math.max((int) (layoutWidth * delta / 100.0), 50);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) lbl_Process.getLayoutParams();
@@ -161,7 +165,7 @@ public class GameBase {
      * Khởi tạo nút Start Game
      */
     protected void startGameButton() {
-        if(this.currentState == GAME_STATE.RUNNING) return;
+        if (this.currentState == GAME_STATE.RUNNING) return;
         this.currentState = GAME_STATE.RUNNING;
         btnStart = new Button(context);
         btnStart.setText("Start Game");
@@ -185,11 +189,14 @@ public class GameBase {
      * Hàm bắt đầu game, lớp con override để thực hiện logic thả vật thể
      */
     protected void startGame() {
-        // Lớp con override
     }
 
     protected void stopGame() {
     }
+
+    protected void initGamePhase() {
+    }
+
 
     /**
      * Hàm kết thúc game
@@ -200,15 +207,11 @@ public class GameBase {
         stopGame();
         saveScore(score.get());
         showGameOverDialog(score.get());
-//        if (btnStart != null) {
-//            btnStart.setVisibility(View.VISIBLE);
-//            btnStart.setEnabled(true);
-//        }
         this.currentState = GAME_STATE.OVER;
     }
 
     protected void resetGame() {
-        if(this.currentState == GAME_STATE.RUNNING) return;
+        if (this.currentState == GAME_STATE.RUNNING) return;
         this.currentState = GAME_STATE.RUNNING;
         score.set(0);
         lifes.set(5);
@@ -218,14 +221,11 @@ public class GameBase {
         updateScore(0);
         updateProcessBar(0);
 
-//        if (btnStart != null) {
-//            btnStart.setVisibility(View.INVISIBLE);
-//        }
         startGame();
     }
 
     protected void showGameOverDialog(int currentScore) {
-        if(this.currentState != GAME_STATE.STOP) return;
+        if (this.currentState != GAME_STATE.STOP) return;
         int highScore = dbHelper.getHighScore();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Game Over");
@@ -260,14 +260,31 @@ public class GameBase {
     /**
      * Random số nguyên trong khoảng [min, max]
      */
-    protected int randomInt(int min, int max) {
+    public int randomInt(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
 
     /**
      * Random số thực trong khoảng [min, max]
      */
-    protected float randomFloat(float min, float max) {
+    public float randomFloat(float min, float max) {
         return min + random.nextFloat() * (max - min);
+    }
+
+    public int fallingSpeed(EntityType type) {
+        int score = this.score.get();
+        int life = this.lifes.get();
+        switch (type) {
+            case GOOD:
+                return 500 * life + score;
+            case BAD:
+                return Math.max(1000, 4000 - score);
+            case HYBRID:
+                return Math.max(1500, 4000 - score);
+            case DEFAULT:
+                return Math.max(4000 - score, 1000);
+            default:
+                return randomInt(1000, 4000);
+        }
     }
 }

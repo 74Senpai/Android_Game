@@ -1,34 +1,35 @@
-package com.example.gameproject.Entities;
+package com.example.gameproject.GameHungBia.Entities.FallObjects;
 
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.gameproject.GameBase;
+import com.example.gameproject.GameHungBia.Entities.VatTheHung;
+import com.example.gameproject.GameBase.GameBase;
 
-public class LyBia extends VatTheRoi {
+public class NuocLoc extends VatTheRoi {
 
-    private final TextView lbl_vungHungVatThe;
+    private TextView lbl_vungHungVatThe;
     private final GameBase GAME;
+    protected TextView lbl_vatTheRoi;
 
-    public LyBia(int tocDoRoi,
-                 int heSoTangToc,
-                 int doDichChuyenTrucNgang,
-                 TextView lbl_vungHungVatThe,
-                 GameBase game) {
+    public NuocLoc(int tocDoRoi,
+                   int diemBatDauRoiX,
+                   int diemBatDauRoiY,
+                   VatTheHung vatTheHung,
+                   GameBase game) {
 
         super(tocDoRoi,
-                heSoTangToc,
-                doDichChuyenTrucNgang,
+                diemBatDauRoiX,
+                diemBatDauRoiY,
                 game.layoutGame);
 
-        this.lbl_vungHungVatThe = lbl_vungHungVatThe;
+        this.lbl_vungHungVatThe = vatTheHung.lbl_beHung;
         this.GAME = game;
     }
 
     @Override
     public void khoiTaoVatThe() {
         lbl_vatTheRoi = new TextView(this.GAME.context);
-        lbl_vatTheRoi.setText("🍺");
+        lbl_vatTheRoi.setText("🥛");
         lbl_vatTheRoi.setTextSize(36);
         lbl_vatTheRoi.setVisibility(TextView.VISIBLE);
         this.GAME.layoutGame.addView(lbl_vatTheRoi);
@@ -43,7 +44,17 @@ public class LyBia extends VatTheRoi {
 
         if ((x >= beHungX_left && x <= beHungX_right) &&
                 (y >= beHungY - 20 && y <= beHungY + lbl_vungHungVatThe.getHeight())) {
-            this.GAME.updateScore(10);
+            int gameScore = this.GAME.score.get();
+            if(gameScore < 500){
+                this.GAME.updateScore(-20);
+            }else if(gameScore < 2500){
+                this.GAME.updateScore(-50);
+            }else{
+                this.GAME.updateScore(-5);
+            }
+            if(this.GAME.lifes.get() <= 8){
+                this.GAME.updateLifes(1);
+            }
             return true;
         }
 
@@ -56,19 +67,4 @@ public class LyBia extends VatTheRoi {
         this.xoaVatThe();
         System.out.println("Vat the cham be hung");
     }
-
-    @Override
-    public boolean missing(TextView lbl_vatTheRoi, float y) {
-        float beHungY = this.lbl_vungHungVatThe.getY();
-        float beHungHeight = this.lbl_vungHungVatThe.getHeight();
-        float paddingMiss = 20;
-        if ((y > (beHungY + beHungHeight + paddingMiss))
-                && lbl_vatTheRoi.isEnabled()) {
-            this.GAME.updateLifes(-1);
-            lbl_vatTheRoi.setEnabled(false);
-            return true;
-        }
-        return false;
-    }
 }
-
