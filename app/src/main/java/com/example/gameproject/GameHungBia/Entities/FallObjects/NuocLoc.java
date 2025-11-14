@@ -11,6 +11,8 @@ public class NuocLoc extends VatTheRoi {
     private final GameBase GAME;
     protected TextView lbl_vatTheRoi;
 
+    private VatTheHung vatTheHung;
+
     public NuocLoc(int tocDoRoi,
                    int diemBatDauRoiX,
                    int diemBatDauRoiY,
@@ -22,6 +24,7 @@ public class NuocLoc extends VatTheRoi {
                 diemBatDauRoiY,
                 game.layoutGame);
 
+        this.vatTheHung = vatTheHung;
         this.lbl_vungHungVatThe = vatTheHung.lbl_beHung;
         this.GAME = game;
     }
@@ -45,15 +48,18 @@ public class NuocLoc extends VatTheRoi {
         if ((x >= beHungX_left && x <= beHungX_right) &&
                 (y >= beHungY - 20 && y <= beHungY + lbl_vungHungVatThe.getHeight())) {
             int gameScore = this.GAME.score.get();
-            if(gameScore < 500){
+            if (gameScore < 500) {
                 this.GAME.updateScore(-20);
-            }else if(gameScore < 2500){
+            } else if (gameScore < 2500) {
                 this.GAME.updateScore(-50);
-            }else{
+            } else {
                 this.GAME.updateScore(-5);
             }
-            if(this.GAME.lifes.get() <= 8){
+            if (this.GAME.lifes.get() <= 8) {
                 this.GAME.updateLifes(1);
+            }
+            if (this.lbl_vungHungVatThe.getWidth() > vatTheHung.minWidth) {
+                this.vatTheHung.updateWidth(this.lbl_vungHungVatThe.getWidth() - 10);
             }
             return true;
         }

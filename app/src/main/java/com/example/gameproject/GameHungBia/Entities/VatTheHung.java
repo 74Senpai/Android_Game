@@ -16,19 +16,16 @@ public class VatTheHung {
     protected Context context;
     protected float CHIEU_CAO;
     protected float CHIEU_DAI;
-    private final float layoutWidth;
-    private final int maxWidth;
-    private final int minWidth;
+    public final int maxWidth;
+    public final int minWidth;
 
-    public VatTheHung(RelativeLayout layout_vungHung, Context context,
-                      int maxWidth, int minWidth) {
+    public VatTheHung(RelativeLayout layout_vungHung, Context context) {
         this.layout = layout_vungHung;
         this.context = context;
         this.CHIEU_CAO = Resources.getSystem().getDisplayMetrics().heightPixels;
         this.CHIEU_DAI = Resources.getSystem().getDisplayMetrics().widthPixels;
-        this.layoutWidth = this.layout.getWidth();
-        this.maxWidth = maxWidth;
-        this.minWidth = minWidth;
+        this.maxWidth = (int) CHIEU_DAI / 3;
+        this.minWidth = (int) CHIEU_DAI / 6;
     }
 
     public void init() {
@@ -36,7 +33,7 @@ public class VatTheHung {
         lbl_beHung.setBackgroundColor(Color.GREEN);
         lbl_beHung.setWidth((int)(maxWidth + minWidth) / 2);
         lbl_beHung.setX(CHIEU_DAI / 2);
-        lbl_beHung.setY(CHIEU_CAO - 500);
+        lbl_beHung.setY(CHIEU_CAO - (CHIEU_CAO  / 5));
     }
 
     @SuppressLint("ClickableViewAccessibility")

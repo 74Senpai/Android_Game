@@ -39,10 +39,10 @@ public class GameObjectManager {
         if ((live < 3 && score > 100) || score > 2700) {
             initNuocLoc();
         }
-        if (live < 4 && vatTheHung.lbl_beHung.getWidth() <= 200 && score > 500) {
+        if (live < 4 && vatTheHung.lbl_beHung.getWidth() <= vatTheHung.maxWidth && score > 500) {
             initChanh();
         }
-        if(score > 3000){
+        if (score > 3000) {
             initBom();
         }
     }
@@ -52,7 +52,7 @@ public class GameObjectManager {
         LyBia lyBia = new LyBia(
                 gameBase.fallingSpeed(GameBase.EntityType.DEFAULT),
                 randomX,
-                (int)diemTha,
+                (int) diemTha,
                 vatTheHung,
                 gameBase
         );
@@ -60,12 +60,12 @@ public class GameObjectManager {
         lyBia.Roi();
     }
 
-    private void initNuocLoc(){
+    private void initNuocLoc() {
         int randomX = random.nextInt(Math.max(maxX, 1));
         NuocLoc lyNuoc = new NuocLoc(
                 gameBase.fallingSpeed(GameBase.EntityType.HYBRID),
                 randomX,
-                (int)diemTha,
+                (int) diemTha,
                 vatTheHung,
                 gameBase
         );
@@ -73,7 +73,7 @@ public class GameObjectManager {
         lyNuoc.Roi();
     }
 
-    private void initChanh(){
+    private void initChanh() {
         int randomX = random.nextInt(Math.max(maxX, 1));
         Chanh quaChanh = new Chanh(
                 gameBase.fallingSpeed(GameBase.EntityType.GOOD),
@@ -86,7 +86,7 @@ public class GameObjectManager {
         quaChanh.Roi();
     }
 
-    private void initBom(){
+    private void initBom() {
         int randomX = random.nextInt(Math.max(maxX, 1));
         Bom quaBom = new Bom(
                 gameBase.fallingSpeed(GameBase.EntityType.BAD),
@@ -98,14 +98,15 @@ public class GameObjectManager {
         quaBom.khoiTaoVatThe();
         quaBom.Roi();
     }
+
     private void initVatTheHung() {
-        this.vatTheHung = new VatTheHung(layoutVungTha, context, 360, 100);
+        this.vatTheHung = new VatTheHung(layoutVungTha, context);
         vatTheHung.init();
         vatTheHung.setDragEvent();
         vatTheHung.addToView();
     }
 
-    public void anVatTheHung(){
+    public void anVatTheHung() {
         this.vatTheHung.lbl_beHung.setVisibility(GONE);
     }
 }
