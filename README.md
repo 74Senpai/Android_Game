@@ -83,7 +83,7 @@ Giải thích nhanh:
 * Java version: phù hợp với Android (Java 17 theo `app/build.gradle`).
 * Android Studio version: đề nghị phiên bản mới (ví dụ Arctic Fox / Bumblebee trở lên) để tương thích Gradle.
 * Gradle plugin version và Android Gradle plugin – hãy kiểm tra `build.gradle` và cập nhật nếu cần.
-* Thiết bị thử nghiệm: Android 7.0+ (hoặc minSdk bạn đặt) để đảm bảo chạy được.
+* Thiết bị thử nghiệm: Android 9.0+ (API 28, theo `minSdk` bạn đặt) để đảm bảo chạy được.
 
 ## Góp phần & Hỗ trợ
 
