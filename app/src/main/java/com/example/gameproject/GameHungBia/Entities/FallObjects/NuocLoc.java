@@ -59,7 +59,7 @@ public class NuocLoc extends VatTheRoi {
                 this.GAME.updateLifes(1);
             }
             if (this.lbl_vungHungVatThe.getWidth() > vatTheHung.minWidth) {
-                this.vatTheHung.updateWidth(-10);
+                this.vatTheHung.updateWidth(this.lbl_vungHungVatThe.getWidth() - 10);
             }
             return true;
         }
