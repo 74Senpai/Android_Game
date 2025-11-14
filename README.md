@@ -1,7 +1,3 @@
-Dưới đây là bản **README** cho dự án Android_Game của bạn—mình cố gắng viết rõ ràng, dễ hiểu và thêm chút phong cách “vui thôi đừng nghiêm” để phù hợp bạn. Bạn có thể điều chỉnh lại cho phù hợp với mục đích và nội dung thực tế của dự án nhé.
-
----
-
 # Android_Game
 
 > Dự án game Android đơn giản — bạn vui, người chơi nhảy, và bug thì… ít đi (hy vọng vậy 😄)
@@ -24,15 +20,22 @@ Bạn có thể coi nó như một khung để phát triển game nhỏ, hoặc 
 Dưới đây là các thành phần nổi bật từ repository:
 
 ```
-.idea/
-app/
-gradle/
-.gitignore
-build.gradle
-gradle.properties
-gradlew
-gradlew.bat
-settings.gradle
+├───.gradle
+├───.idea
+├───app
+│   ├───build
+│   └───src
+│       ├───androidTest
+│       │   └───java
+│       │       └───com
+│       │           └───example
+│       │               └───gameproject
+│       ├───main
+│       │   ├───java
+│       │   └───res
+│       └───test
+├───build
+└───gradle
 ```
 
 (…) ([GitHub][1])
@@ -98,9 +101,3 @@ Hiện tại chưa thấy file `LICENSE` trong repository — mình khuyên bạ
 
 Cảm ơn bạn đã xem dự án này! Hy vọng nó là bước khởi đầu tốt cho những game Android vui nhộn của bạn 😄
 Nếu bạn cần viết thêm các phần chi tiết (ví dụ: “Cách thêm asset”, “Tối ưu hiệu năng”, “Kiến trúc game loop”) thì cứ nói — mình hỗ trợ ngay.
-
----
-
-Nếu muốn, mình có thể **soạn sẵn một file `README.md`** mà bạn chỉ việc copy vào repo luôn — bạn muốn mình làm vậy không?
-
-[1]: https://github.com/74Senpai/Android_Game "GitHub - 74Senpai/Android_Game"
