@@ -35,11 +35,11 @@ public class MainActivity3 extends AppCompatActivity {
                 break;
             case GAME_CHIM_BAY:
                 TextView notifi = new TextView(this);
-                notifi.setText("Game chua phat hanh");
+                notifi.setText("Game chưa phát hành");
                 notifi.setTextSize(36);
                 notifi.setGravity(Gravity.CENTER);
                 layout.addView(notifi);
-                Toast.makeText(MainActivity3.this, "Game chua phat hanh", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity3.this, "Game chưa phát hành", Toast.LENGTH_LONG).show();
                 break;
         }
 
