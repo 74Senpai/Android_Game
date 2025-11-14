@@ -80,7 +80,7 @@ Giải thích nhanh:
 
 ## Cấu hình build & môi trường
 
-* Java version: phù hợp với Android (thường Java 8 hoặc Java 11 tùy compileSdk).
+* Java version: phù hợp với Android (Java 17 theo `app/build.gradle`).
 * Android Studio version: đề nghị phiên bản mới (ví dụ Arctic Fox / Bumblebee trở lên) để tương thích Gradle.
 * Gradle plugin version và Android Gradle plugin – hãy kiểm tra `build.gradle` và cập nhật nếu cần.
 * Thiết bị thử nghiệm: Android 7.0+ (hoặc minSdk bạn đặt) để đảm bảo chạy được.
