@@ -42,7 +42,7 @@ public class GameObjectManager {
         if (live < 4 && vatTheHung.lbl_beHung.getWidth() <= 200 && score > 500) {
             initChanh();
         }
-        if(score > 100){
+        if(score > 3000){
             initBom();
         }
     }
