@@ -10,9 +10,9 @@ Bạn có thể coi nó như một khung để phát triển game nhỏ, hoặc 
 
 ## Công nghệ sử dụng
 
-* Java (100 % code Java) ([GitHub][1])
-* Android (sử dụng cấu trúc Android Studio: có folder `app`, có Gradle wrapper) ([GitHub][1])
-* Build hệ thống: Gradle (có `build.gradle`, `gradle.properties`, `gradlew`, `gradlew.bat`) ([GitHub][1])
+* Java (100 % code Java)
+* Android (sử dụng cấu trúc Android Studio: có folder `app`, có Gradle wrapper)
+* Build hệ thống: Gradle (có `build.gradle`, `gradle.properties`, `gradlew`, `gradlew.bat`)
 * Chưa tìm thấy rõ thông tin về các thư viện bên ngoài, framework game (nếu có) — cần kiểm tra thêm trong code.
 
 ## Cấu trúc thư mục chính
